@@ -1,0 +1,20 @@
+{
+    "title": "Integração Stormglass.io",
+    "config": {
+        "step": {
+            "user": {
+                "title": "Stormglass.io",
+                "description": "Por favor, introduza as suas credenciais e as coordenadas desejadas.",
+                "data": {},
+                "data_description": {}
+            }
+        },
+        "error": {
+            "auth": "Credenciais inválidas para https://stormglass.io/"
+        },
+        "abort": {
+            "single_instance_allowed": "Só é permitida uma unica integração para o stormglass.io.",
+            "already_configured": "Esta integração já existe"
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "title": "Stormglass.io Tides integration",
+    "config": {
+        "step": {
+            "user": {
+                "title": "Stormglass.io",
+                "description": "Please type your credentials and location",
+                "data": {
+                    "api_key": "API KEY",
+                    "latitude": "Latitude",
+                    "longitude": "Longitude",
+                    "name": "Name"
+                },
+                "data_description": {}
+            }
+        },
+        "error": {
+            "auth": "Invalid credentials accessing https://stormglass.io/"
+        },
+        "abort": {
+            "single_instance_allowed": "Only a single configuration for stormglass is allowed.",
+            "already_configured": "Integration is already configured."
+        }
+    }
+}
