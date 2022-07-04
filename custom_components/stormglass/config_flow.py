@@ -70,7 +70,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 # ): str,
                 vol.Optional(CONF_BEACH, default=DEFAULT_BEACH): selector.selector(
                     { "select": { "options": BEACHES_PT} }
-                ),
+                )
                 # vol.Optional(
                 #     CONF_NAME,
                 #     default=self.hass.config.location_name
