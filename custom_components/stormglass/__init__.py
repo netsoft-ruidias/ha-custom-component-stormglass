@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 
 from homeassistant.core import HomeAssistant
+from homeassistant.const import CONF_DEVICE, Platform
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.typing import ConfigType
 
@@ -12,7 +13,7 @@ __version__ = "1.0.0"
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
 
-PLATFORMS: list[str] = ["sensor"]
+PLATFORMS: list[str] = [Platform.SENSOR]
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType):

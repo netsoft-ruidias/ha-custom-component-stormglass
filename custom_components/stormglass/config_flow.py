@@ -5,7 +5,6 @@ import logging
 import voluptuous as vol
 import async_timeout
 
-
 from homeassistant import config_entries
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers import selector
@@ -69,9 +68,15 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 # vol.Optional(
                 #     CONF_NAME, default=self.hass.config.location_name
                 # ): str,
-                vol.Optional(CONF_BEACH, default=DEFAULT_BEACH): selector.selector(
-                    {"select": {"options": BEACHES_PT}}
-                ),                
+                # vol.Optional(CONF_BEACH, default=DEFAULT_BEACH): selector.selector(
+                #     { "select": { "options": BEACHES_PT} }
+                # ),
+                vol.Optional(
+                    CONF_NAME,
+                    default=self.config_entry.options.get(
+                        CONF_NAME, ["default"]
+                        ),
+                    ): cv.multi_select({"default": "Default", "other": "Other"}),                
             }),
             errors=errors,
         )
