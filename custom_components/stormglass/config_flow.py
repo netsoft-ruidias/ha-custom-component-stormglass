@@ -73,9 +73,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 # ),
                 vol.Optional(
                     CONF_NAME,
-                    default=self.config_entry.options.get(
-                        CONF_NAME, ["default"]
-                        ),
+                    default = ""
                     ): cv.multi_select({"default": "Default", "other": "Other"}),                
             }),
             errors=errors,
