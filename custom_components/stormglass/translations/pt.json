@@ -1,12 +1,16 @@
 {
-    "title": "Integração Stormglass.io",
+    "title": "Marés Stormglass.io (Tides)",
     "config": {
         "step": {
             "user": {
                 "title": "Stormglass.io",
                 "description": "Por favor, introduza as suas credenciais e as coordenadas desejadas.",
-                "data": {},
-                "data_description": {}
+                "data": {
+                    "beach": "Praia"
+                },
+                "data_description": {
+                    "beach": "Escolha a sua praia"
+                }
             }
         },
         "error": {

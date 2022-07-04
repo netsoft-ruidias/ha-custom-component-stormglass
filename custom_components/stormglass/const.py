@@ -17,11 +17,13 @@ ATTR_LOWTIDE_ICON = "mdi:waves-arrow-left"
 CONF_COUNTRY = "country"
 CONF_BEACH = "beach"
 
-BEACHES_PT: Dict[str, Any] = { 
-    'Praia da Foz do Minho': { 'lat': 41.68, 'lng': -8.83 }, 
-    'Praia do Camarido': { 'lat': 41.68, 'lng': -8.83 }, 
-    'Praia de Moledo': { 'lat': 41.68, 'lng': -8.83 }, 
-    'Praia de Vila Praia de Âncora': { 'lat': 41.68, 'lng': -8.83 }, 
-    'Praia da Duna do Caldeirão': { 'lat': 41.68, 'lng': -8.83 }, 
-    'Praia do Forte do Cão': { 'lat': 41.68, 'lng': -8.83 }, 
-}
+DEFAULT_BEACH = "Praia da Foz do Minho"
+
+BEACHES_PT = [
+    {"value": { 'lat': 41.68, 'lng': -8.83 }, "label": DEFAULT_BEACH },
+    {"value": { 'lat': 41.68, 'lng': -8.83 }, "label": "Praia do Camarido" },
+    {"value": { 'lat': 41.68, 'lng': -8.83 }, "label": "Praia de Moledo" },
+    {"value": { 'lat': 41.68, 'lng': -8.83 }, "label": "Praia de Vila Praia de Âncora" },
+    {"value": { 'lat': 41.68, 'lng': -8.83 }, "label": "Praia da Duna do Caldeirão" },
+    {"value": { 'lat': 41.68, 'lng': -8.83 }, "label": "Praia do Forte do Cão" }
+]

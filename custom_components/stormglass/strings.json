@@ -1,5 +1,5 @@
 {
-    "title": "Stormglass.io Tides integration",
+    "title": "Stormglass.io Tides",
     "config": {
         "step": {
             "user": {
@@ -9,7 +9,7 @@
                     "api_key": "API KEY",
                     "latitude": "Latitude",
                     "longitude": "Longitude",
-                    "name": "Name"
+                    "beach": "Beach Name"
                 },
                 "data_description": {}
             }

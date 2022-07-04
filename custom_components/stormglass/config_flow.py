@@ -8,6 +8,7 @@ import async_timeout
 
 from homeassistant import config_entries
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers import selector
 import homeassistant.helpers.config_validation as cv
 from homeassistant.const import (
     CONF_API_KEY,
@@ -17,17 +18,15 @@ from homeassistant.const import (
 )
 
 from .api import StormglassAPI
-from .const import DOMAIN
+from .const import (
+    DOMAIN, 
+    CONF_BEACH,
+    DEFAULT_BEACH, 
+    BEACHES_PT
+)
 
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
-
-DATA_SCHEMA = vol.Schema({
-    vol.Required(CONF_API_KEY): cv.string,
-    vol.Required(CONF_LATITUDE): cv.latitude,
-    vol.Required(CONF_LONGITUDE): cv.longitude,
-    vol.Required(CONF_NAME): cv.string,
-})
 
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -59,7 +58,21 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user", 
-            data_schema=DATA_SCHEMA, 
+            data_schema=vol.Schema({
+                vol.Required(CONF_API_KEY): str,
+                vol.Optional(
+                    CONF_LATITUDE, default=self.hass.config.latitude
+                ): cv.latitude,
+                vol.Optional(
+                    CONF_LONGITUDE, default=self.hass.config.longitude
+                ): cv.longitude,
+                # vol.Optional(
+                #     CONF_NAME, default=self.hass.config.location_name
+                # ): str,
+                vol.Optional(CONF_BEACH, default=DEFAULT_BEACH): selector.selector(
+                    {"select": {"options": BEACHES_PT}}
+                ),                
+            }),
             errors=errors,
         )
 
