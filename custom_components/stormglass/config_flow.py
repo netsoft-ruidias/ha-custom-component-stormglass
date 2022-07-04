@@ -73,8 +73,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 # ),
                 vol.Optional(
                     CONF_NAME,
-                    default = ""
-                    ): cv.multi_select({"default": "Default", "other": "Other"}),                
+                    default=self.hass.config.location_name
+                ): cv.multi_select({"default": "Default", "other": "Other"}),                
             }),
             errors=errors,
         )
