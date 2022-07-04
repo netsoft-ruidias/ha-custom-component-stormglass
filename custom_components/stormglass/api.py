@@ -40,6 +40,12 @@ class StormglassAPI:
                     obj = json.loads(text)
                     if obj['data'] and obj['meta']:
                         return obj
+                    elif obj['errors'] and obj['meta']:
+                        raise Exception(
+                            "Request nº %s of %s: %s", 
+                            obj['meta']['requestCount'],
+                            obj['meta']['dailyQuota'],
+                            obj['errors']['key'])
                     else:
                         raise Exception("Fetch extremes failed with invalid response.")
                 raise Exception("Could not fetch extremes, API failed")
