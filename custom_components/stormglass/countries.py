@@ -12,7 +12,6 @@ BEACHES = {
     "FR": []
 }
 
-## https://pt.wikipedia.org/wiki/Lista_de_munic%C3%ADpios_de_Portugal
 ## https://www.playocean.net/portugal/todas-as-praias-de-portugal
 BEACHES["PT"] = [
     ## MINHO
@@ -98,22 +97,150 @@ BEACHES["PT"] = [
     { "value": "41.378,-8.768", "label": "PVZ: Praia do Leixão" },
     # Vila do Conde
     { "value": "41.378,-8.768", "label": "VCD: Prainha" },
-    # Matosinhos MTS:
-    # Porto PRT:
-    # Vila Nova de Gaia VNG:
-    # Espinho ESP:
+    { "value": "41.363,-8.760", "label": "VCD: Praia do Senhor dos Navegantes" },
+    { "value": "41.362,-8.760", "label": "VCD: Praia dos Barcos" },
+    { "value": "41.361,-8.758", "label": "VCD: Praia de Mar e Sol" },
+    { "value": "41.360,-8.758", "label": "VCD: Praia de Luzimar" },
+    { "value": "41.359,-8.757", "label": "VCD: Praia do Pôr do Sol" },
+    { "value": "41.358,-8.756", "label": "VCD: Praia Atlântica" },
+    { "value": "41.355,-8.754", "label": "VCD: Praia das Caxinas" },
+    { "value": "41.353,-8.754", "label": "VCD: Praia da Olinda" },
+    { "value": "41.350,-8.754", "label": "VCD: Praia do Turismo" },
+    { "value": "41.347,-8.753", "label": "VCD: Praia Azul" },
+    { "value": "41.344,-8.753", "label": "VCD: Praia da Ladeira" },
+    { "value": "41.342,-8.753", "label": "VCD: Praia do Forno" },
+    { "value": "41.342,-8.752", "label": "VCD: Praia do Seca" },
+    { "value": "41.340,-8.750", "label": "VCD: Praia da Senhora da Guia" },
+    { "value": "41.339,-8.744", "label": "VCD: Praia da Azurara" },
+    { "value": "41.330,-8.739", "label": "VCD: Praia de Árvore" },
+    { "value": "41.312,-8.739", "label": "VCD: Praia da Areia" },
+    { "value": "41.309,-8.740", "label": "VCD: Praia de Mindelo" },
+    { "value": "41.303,-8.737", "label": "VCD: Praia do Pinhal dos Eléctricos" },
+    { "value": "41.301,-8.737", "label": "VCD: Praia de Laderça" },
+    { "value": "41.298,-8.737", "label": "VCD: Praia da Terra Nova" },
+    { "value": "41.295,-8.736", "label": "VCD: Praia da Congreira" },
+    { "value": "41.290,-8.733", "label": "VCD: Praia de Vila Chã" },
+    { "value": "41.288,-8.732", "label": "VCD: Praia do Pucinho" },
+    { "value": "41.285,-8.731", "label": "VCD: Praia de Moreiró" },
+    { "value": "41.283,-8.731", "label": "VCD: Praia de São Paio" },
+    { "value": "41.274,-8.728", "label": "VCD: Praia de Labruge" },
+    # Matosinhos:
+    { "value": "41.267,-8.726", "label": "MTS: Praia de Angeiras" },
+    { "value": "41.262,-8.725", "label": "MTS: Praia do Barreiro" },
+    { "value": "41.260,-8.724", "label": "MTS: Praia Central" },
+    { "value": "41.257,-8.723", "label": "MTS: Praia do Funtão" },
+    { "value": "41.252,-8.723", "label": "MTS: Praia das Pedras Brancas" },
+    { "value": "41.249,-8.725", "label": "MTS: Praia das Pedras do Corgo" },
+    { "value": "41.242,-8.727", "label": "MTS: Praia das Pedras da Agudela" },
+    { "value": "41.239,-8.725", "label": "MTS: Praia da Agudela" },
+    { "value": "41.237,-8.723", "label": "MTS: Praia da Quebrada" },
+    { "value": "41.235,-8.723", "label": "MTS: Praia do Marreco" },
+    { "value": "41.230,-8.721", "label": "MTS: Praia da Memória" },
+    { "value": "41.227,-8.720", "label": "MTS: Praia do Facho" },
+    { "value": "41.224,-8.716", "label": "MTS: Praia do Paraíso" },
+    { "value": "41.220,-8.714", "label": "MTS: Praia do Cabo do Mundo" },
+    { "value": "41.217,-8.714", "label": "MTS: Praia das Salinas" },
+    { "value": "41.208,-8.715", "label": "MTS: Praia do Aterro" },
+    { "value": "41.204,-8.714", "label": "MTS: Praia Azul" },
+    { "value": "41.202,-8.713", "label": "MTS: Praia da Boa Nova" },
+    { "value": "41.196,-8.709", "label": "MTS: Praia do Fuzelhas" },
+    { "value": "41.189,-8.705", "label": "MTS: Praia de Leça da Palmeira" },
+    { "value": "41.176,-8.691", "label": "MTS: Praia de Matosinhos" },
+    # Porto
+    { "value": "41.170,-8.688", "label": "PRT: Praia Internacional" },
+    { "value": "41.167,-8.689", "label": "PRT: Praia do Castelo do Queijo" },
+    { "value": "41.160,-8.685", "label": "PRT: Praia do Homem do Leme" },
+    { "value": "41.158,-8.683", "label": "PRT: Praia do Molhe" },
+    { "value": "41.156,-8.681", "label": "PRT: Praia de Gondarém" },
+    { "value": "41.153,-8.679", "label": "PRT: Praia da Luz" },
+    { "value": "41.152,-8.678", "label": "PRT: Praia dos Ingleses" },
+    { "value": "41.149,-8.676", "label": "PRT: Praia do Ourigo" },
+    { "value": "41.147,-8.675", "label": "PRT: Praia do Carneiro" },
+    { "value": "41.147,-8.674", "label": "PRT: Praia das Pastoras" },
+    # Vila Nova de Gaia
+    { "value": "41.139,-8.666", "label": "VNG: Praia do Cabedelo do Douro" },
+    { "value": "41.129,-8.668", "label": "VNG: Praia de Lavadores" },
+    { "value": "41.126,-8.667", "label": "VNG: Praia das Pedras Amarelas" },
+    { "value": "41.122,-8.667", "label": "VNG: Praia da Estrela do Mar" },
+    { "value": "41.120,-8.665", "label": "VNG: Praia de Salgueiros" },
+    { "value": "41.117,-8.663", "label": "VNG: Praia da Sereia da Costa Verde" },
+    { "value": "41.115,-8.663", "label": "VNG: Praia de Canide" },
+    { "value": "41.105,-8.662", "label": "VNG: Praia de Marbelo" },
+    { "value": "41.103,-8.661", "label": "VNG: Praia da Madalena" },
+    { "value": "41.092,-8.657", "label": "VNG: Praia de Valadares" },
+    { "value": "41.089,-8.656", "label": "VNG: Praia do Sindicato" },
+    { "value": "41.084,-8.656", "label": "VNG: Praia do Atlântico" },
+    { "value": "41.082,-8.656", "label": "VNG: Praia de Dunas Mar" },
+    { "value": "41.079,-8.656", "label": "VNG: Praia de Francelos" },
+    { "value": "41.076,-8.657", "label": "VNG: Praia de Francemar" },
+    { "value": "41.072,-8.658", "label": "VNG: Praia da Sãozinha" },
+    { "value": "41.069,-8.657", "label": "VNG: Praia do Senhor da Pedra" },
+    { "value": "41.067,-8.657", "label": "VNG: Praia de Miramar" },
+    { "value": "41.058,-8.656", "label": "VNG: Praia de Mar e Sol" },
+    { "value": "41.053,-8.655", "label": "VNG: Praia da Areia Branca" },
+    { "value": "41.051,-8.655", "label": "VNG: Praia da Aguda" },
+    { "value": "41.044,-8.652", "label": "VNG: Praia da Sétima Arte" },
+    { "value": "41.040,-8.650", "label": "VNG: Praia da Granja" },
+    { "value": "41.033,-8.646", "label": "VNG: Praia de Bocamar" },
+    { "value": "41.028,-8.645", "label": "VNG: Praia do Hotel Solverde" },
+    { "value": "41.025,-8.645", "label": "VNG: Praia do Brito" },
+    { "value": "41.023,-8.644", "label": "VNG: Praia das Pedras da Maré" },
+    { "value": "41.021,-8.644", "label": "VNG: Praia do Areal da Marinha" },
+    # Espinho
+    { "value": "41.014,-8.644", "label": "ESP: Praia da Frente Azul" },
+    { "value": "41.009,-8.646", "label": "ESP: Praia da Baía" },
+    { "value": "41.002,-8.646", "label": "ESP: Praia da Rua 37" },
+    { "value": "40.997,-8.646", "label": "ESP: Praia do Bairro Piscatório" },
+    { "value": "40.988,-8.646", "label": "ESP: Praia de Silvalde" },
+    { "value": "40.977,-8.649", "label": "ESP: Praia de Paramos" },
+
     
     ## BEIRA LITORAL
-    # Ovar OVR:
-    # Murtosa MRS:
-    # Aveiro AVR:
-    # Ílhavo ILH:
-    # Vagos VGS:
-    # Mira MIR:
-    # Cantanhede CNT:
-    # Figueira da Foz FIG:
-    # Pombal PBL:
-    # Leiria LRA:
+    # Ovar
+    { "value": "40.958,-8.654", "label": "OVR: Praia de Esmoriz" },
+    { "value": "40.940,-8.658", "label": "OVR: Praia de Cortegaça" },
+    { "value": "40.920,-8.661", "label": "OVR: Praia de São Pedro de Maceda" },
+    { "value": "40.893,-8.669", "label": "OVR: Praia das Dunas de Ovar" },
+    { "value": "40.875,-8.676", "label": "OVR: Praia do Furadouro" },
+    { "value": "40.861,-8.679", "label": "OVR: Praia da Marreta" },
+    { "value": "40.828,-8.690", "label": "OVR: Praia de Torrão do Lameiro" },
+    # Murtosa
+    { "value": "40.761,-8.713", "label": "MRS: Praia da Torreira" },
+    { "value": "40.754,-8.715", "label": "MRS: Praia da Colónia de Férias" },
+    { "value": "40.747,-8.718", "label": "MRS: Praia da Gaivina" },
+    { "value": "40.720,-8.728", "label": "MRS: Praia de Muranzel" },
+    # Aveiro
+    { "value": "40.686,-8.740", "label": "AVR: Praia das Dunas de São Jacinto" },
+    { "value": "40.669,-8.746", "label": "AVR: Praia de São Jacinto" },
+    # Ílhavo
+    { "value": "40.641,-8.748", "label": "ILH: Praia Velha" },
+    { "value": "40.639,-8.749", "label": "ILH: Praia Nova" },
+    { "value": "40.632,-8.749", "label": "ILH: Praia da Barra" },
+    { "value": "40.617,-8.753", "label": "ILH: Praia da Costa Nova" },
+    { "value": "40.600,-8.756", "label": "ILH: Praia do Parque de Campismo" },
+    { "value": "40.594,-8.757", "label": "ILH: Praia da Costinha" },
+    # Vagos
+    { "value": "40.579,-8.762", "label": "VGS: Praia da Vagueira" },
+    { "value": "40.549,-8.773", "label": "VGS: Praia do Labrego" },
+    { "value": "40.544,-8.773", "label": "VGS: Praia da Duna Alta" },
+    { "value": "40.537,-8.775", "label": "VGS: Praia da Gafanha da Boa Hora" },
+    { "value": "40.527,-8.777", "label": "VGS: Praia da Ponte da Vagueira" },
+    { "value": "40.521,-8.781", "label": "VGS: Praia do Areão" },
+    # Mira
+    { "value": "40.490,-8.791", "label": "MIR: Praia do Poço da Cruz" },
+    { "value": "40.452,-8.804", "label": "MIR: Praia de Mira" },
+    # Cantanhede 
+    { "value": "40.387,-8.824", "label": "CNT: Praia do Palheirão" },
+    { "value": "40.360,-8.834", "label": "CNT: Praia dos Almadoiros" },
+    { "value": "40.329,-8.844", "label": "CNT: Praia da Tocha" },
+    # Figueira da Foz
+    { "value": ",", "label": "FIG: " },
+    # Pombal
+    { "value": "40.003,-8.913", "label": "PBL: Praia do Osso da Baleia" },
+    # Leiria
+    { "value": "39.938,-8.943", "label": "LRA: Praia do Fausto" },
+    { "value": "39.922,-8.951", "label": "LRA: Praia do Pedrogão" },
+    { "value": "39.891,-8.965", "label": "LRA: Praia do Vigão" },
 
     ## ESTREMADURA
     # Marinha Grande MGR:
