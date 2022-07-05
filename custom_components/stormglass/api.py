@@ -39,15 +39,17 @@ class StormglassAPI:
                     text = await res.text()
                     obj = json.loads(text)
                     if obj['data'] and obj['meta']:
+                        _LOGGER.debug(
+                            "Fetched Extremes, request nº %s", 
+                            obj['meta']['requestCount'])
                         return obj
-                    elif obj['errors'] and obj['meta']:
-                        raise Exception(
-                            "Request nº %s of %s: %s", 
-                            obj['meta']['requestCount'],
-                            obj['meta']['dailyQuota'],
-                            obj['errors']['key'])
-                    else:
-                        raise Exception("Fetch extremes failed with invalid response.")
+                    raise Exception("Fetch extremes failed with invalid response.")
+                elif res.status == 402 and res.content_type == "application/json":
+                    text = await res.text()
+                    obj = json.loads(text)
+                    raise Exception(
+                        f"{obj['errors']['key']}, daily quota {obj['meta']['dailyQuota']}, request count {obj['meta']['requestCount']}.")
+                
                 raise Exception("Could not fetch extremes, API failed")
         except aiohttp.ClientError as err:
             _LOGGER.exception(err)

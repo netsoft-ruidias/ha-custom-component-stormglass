@@ -20,9 +20,9 @@ from .api import StormglassAPI
 from .const import (
     DOMAIN, 
     CONF_BEACH,
-    DEFAULT_BEACH, 
-    BEACHES_PT
+    DEFAULT_COUNTRY
 )
+from .countries import BEACHES
 
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
@@ -40,17 +40,26 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
+            coord = user_input[CONF_BEACH].split(',')
+            record = [f for f in BEACHES[DEFAULT_COUNTRY] if f["value"] == user_input[CONF_BEACH]][0]
+            label = record['label']
+            
             await self.async_set_unique_id(
-                f"{user_input[CONF_LATITUDE]},{user_input[CONF_LONGITUDE]}"
+                f"{DOMAIN}.{label}"
                 .lower())
             self._abort_if_unique_id_configured()
 
-            name = await self._test_credentials(user_input)
-            if name:
-                _LOGGER.debug("Config is valid!")
+            valid = await self._test_credentials(user_input)
+            if valid:
+                _LOGGER.debug("Config is valid!")               
                 return self.async_create_entry(
-                    title= name,
-                    data = user_input
+                    title= label,
+                    data = {
+                        CONF_API_KEY: user_input[CONF_API_KEY],
+                        CONF_LATITUDE: coord[0],
+                        CONF_LONGITUDE: coord[1],
+                        CONF_NAME: label
+                    }
                 ) 
             else:
                 errors = {"base": "auth"}
@@ -59,22 +68,20 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user", 
             data_schema=vol.Schema({
                 vol.Required(CONF_API_KEY): str,
-                vol.Optional(
-                    CONF_LATITUDE, default=self.hass.config.latitude
-                ): cv.latitude,
-                vol.Optional(
-                    CONF_LONGITUDE, default=self.hass.config.longitude
-                ): cv.longitude,
                 # vol.Optional(
-                #     CONF_NAME, default=self.hass.config.location_name
-                # ): str,
-                vol.Optional(
-                    CONF_BEACH, default=DEFAULT_BEACH
-                ): selector.selector({ "select": { "options": BEACHES_PT} })
+                #     CONF_LATITUDE, default=self.hass.config.latitude
+                # ): cv.latitude,
                 # vol.Optional(
-                #     CONF_NAME,
-                #     default=self.hass.config.location_name
-                # ): cv.multi_select({"default": "Default", "other": "Other"}),                
+                #     CONF_LONGITUDE, default=self.hass.config.longitude
+                # ): cv.longitude,
+                vol.Optional(
+                    CONF_BEACH, default=''
+                ): selector.selector({ 
+                    "select": { 
+                        "options": BEACHES[DEFAULT_COUNTRY], 
+                        "mode": "dropdown" 
+                    } 
+                }),
             }),
             errors=errors,
         )

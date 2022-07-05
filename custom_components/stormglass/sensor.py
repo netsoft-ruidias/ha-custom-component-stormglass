@@ -25,6 +25,7 @@ from homeassistant.const import (
 from .api import StormglassAPI
 from .const import (
     DOMAIN, DEFAULT_ICON, UNIT_OF_MEASUREMENT,
+    DATETIME_FORMAT,
     ATTRIBUTION
 )
 
@@ -32,7 +33,7 @@ _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
 
 # Time between updating data from API
-SCAN_INTERVAL = timedelta(hours=6)
+SCAN_INTERVAL = timedelta(minutes=15)
 
 async def async_setup_entry(hass: HomeAssistant, 
                             config_entry: ConfigEntry, 
@@ -107,7 +108,19 @@ class StormglassSensor(SensorEntity):
         """Return the state attributes of this device."""
         return self._attr
 
-    def process_data(self, data, meta) -> None:
+    def _update_state(self, attr) -> None:
+        if attr["high_tide_time_utc"] and attr["low_tide_time_utc"]:
+            high = datetime.timestamp(
+                datetime.strptime(attr["high_tide_time_utc"], DATETIME_FORMAT))
+            low = datetime.timestamp(
+                datetime.strptime(attr["low_tide_time_utc"], DATETIME_FORMAT))
+            if (high - low) > 0:
+                self._state = 50-(((low - datetime.timestamp(datetime.now()))/(high-low)) * 50)
+            else:
+                self._state = 100-(((high - datetime.timestamp(datetime.now()))/(low-high)) * 50)
+            self._available = True
+
+    def _process_data(self, data, meta) -> None:
         attr = { }
 
         if data:
@@ -128,8 +141,9 @@ class StormglassSensor(SensorEntity):
         
         if meta:
             attr['stormglass_api_cost'] = meta['cost']
-            attr['daily_quota'] = meta['dailyQuota']
-            attr['request_count'] = meta['requestCount']
+            attr['credits_left'] = int(meta['dailyQuota']) - int(meta['requestCount'])
+            #attr['daily_quota'] = meta['dailyQuota']
+            #attr['request_count'] = meta['requestCount']
             attr['datum'] = meta['datum']
             attr['station_distance'] = meta['station']['distance']
             attr['station_name'] = meta['station']['name']
@@ -137,33 +151,44 @@ class StormglassSensor(SensorEntity):
         self._attr = attr
 
         if attr["high_tide_time_utc"] and attr["low_tide_time_utc"]:
-            high = datetime.timestamp(
-                datetime.strptime(attr["high_tide_time_utc"], '%Y-%m-%dT%H:%M:%S:00'))
-            low = datetime.timestamp(
-                datetime.strptime(attr["low_tide_time_utc"], '%Y-%m-%dT%H:%M:%S:00'))
-            if (high - low) > 0:
-                self._state = 50-(((low - datetime.timestamp(datetime.now))/(high-low)) * 50)
-            else:
-                self._state = 100-(((high - datetime.timestamp(datetime.now))/(low-high)) * 50)
-            self._available = True
+            self._update_state(attr)
 
         return
+
+    def _is_update_needed(self, attr) -> bool:
+        if hasattr(attr, 'next_tide_at'):
+            if attr["next_tide_at"]:
+                now = datetime.now()
+                next = datetime.strptime(
+                    attr["next_tide_at"],
+                    DATETIME_FORMAT)
+                diference = next - now
+                total_minutes = diference.total_seconds() / 60
+                hours = int(total_minutes / 60)
+                minutes = int(total_minutes - (hours*60))
+                self._attr["next_tide_in"] = f"{hours}h{minutes}"
+                return (hours <= 0 and minutes < 15)
+        return True
 
     async def async_update(self) -> None:
         """Fetch new state data for the sensor."""
         api = self._api
         config = self._config
 
-        try:        
-            details = await api.fetchExtremes(
-                config[CONF_API_KEY], 
-                float(config[CONF_LATITUDE]),
-                float(config[CONF_LONGITUDE]))
-            if (details):
-                self.process_data(
-                    details['data'],
-                    details['meta'])
-                
-        except aiohttp.ClientError as err:
-            self._available = False
-            _LOGGER.exception("Error fetching data from Stormglass.io API.", err)
+        attr = self._attr
+        if (self._is_update_needed(attr)):
+            try:        
+                details = await api.fetchExtremes(
+                    config[CONF_API_KEY], 
+                    float(config[CONF_LATITUDE]),
+                    float(config[CONF_LONGITUDE]))
+                if (details):
+                    self._process_data(
+                        details['data'],
+                        details['meta'])
+                    
+            except aiohttp.ClientError as err:
+                self._available = False
+                _LOGGER.exception("Error fetching data from Stormglass.io API.", err)
+        else:
+            self._update_state(attr)
