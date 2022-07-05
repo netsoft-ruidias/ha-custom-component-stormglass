@@ -15,6 +15,7 @@ from homeassistant.components.sensor import (
 from homeassistant.core import HomeAssistant
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.util import dt
 from homeassistant.const import (
     CONF_API_KEY,
     CONF_LATITUDE,
@@ -25,8 +26,18 @@ from homeassistant.const import (
 from .api import StormglassAPI
 from .const import (
     DOMAIN, DEFAULT_ICON, UNIT_OF_MEASUREMENT,
-    DATETIME_FORMAT,
-    ATTRIBUTION
+    ATTRIBUTION,
+    ATTR_HIGH_TIDE_TIME, ATTR_LOW_TIDE_TIME,
+    ATTR_HIGH_TIDE_HEIGHT, ATTR_LOW_TIDE_HEIGHT,
+    ATTR_NEXT_TIDE, ATTR_NEXT_TIDE_AT, ATTR_NEXT_TIDE_IN,
+    ATTR_STORMGLASS_API_COST, ATTR_CREDITS_LEFT, ATTR_DATUM,
+    ATTR_STATION_DISTANCE, ATTR_STATION_NAME,
+
+    API_META_COST, API_META_DAILYQUOTA, API_META_REQUESTCOUNT,
+    API_META_DATUM, API_META_STATION, API_META_DISTANCE, API_META_NAME,
+    API_DATA_TIME, API_DATA_HEIGHT, API_DATA_TYPE,
+
+    API_DATA_HIGHTIDE, API_DATA_LOWTIDE
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -109,64 +120,76 @@ class StormglassSensor(SensorEntity):
         return self._attr
 
     def _update_state(self, attr) -> None:
-        if attr["high_tide_time_utc"] and attr["low_tide_time_utc"]:
+        """Update state with new value."""
+        if attr[ATTR_HIGH_TIDE_TIME] and attr[ATTR_LOW_TIDE_TIME]:
             high = datetime.timestamp(
-                datetime.strptime(attr["high_tide_time_utc"], DATETIME_FORMAT))
+                dt.parse_datetime(attr[ATTR_HIGH_TIDE_TIME]))
             low = datetime.timestamp(
-                datetime.strptime(attr["low_tide_time_utc"], DATETIME_FORMAT))
+                dt.parse_datetime(attr[ATTR_LOW_TIDE_TIME]))
+
             if (high - low) > 0:
-                self._state = 50-(((low - datetime.timestamp(datetime.now()))/(high-low)) * 50)
+                self._state = int(50-(((low - datetime.timestamp(datetime.utcnow()))/(high-low)) * 50))
             else:
-                self._state = 100-(((high - datetime.timestamp(datetime.now()))/(low-high)) * 50)
+                self._state = int(100-(((high - datetime.timestamp(datetime.utcnow()))/(low-high)) * 50))
             self._available = True
 
+    def _next_tide_index(self, data) -> int:
+        """Get next tide index."""
+        index = 0
+        now = datetime.utcnow()
+        for row in data:
+            time = dt.parse_datetime(row["time"])
+            if (time > now):
+                return index
+            index = index + 1
+        return 0
+
     def _process_data(self, data, meta) -> None:
+        """Check if we need to fetch data from the API."""
         attr = { }
 
         if data:
-            if "high" in str(data[0]["type"]):
-                attr["high_tide_time_utc"] = data[0]["time"]
-                attr["high_tide_height"] = data[0]["height"]
-                attr["low_tide_time_utc"] = data[1]["time"]
-                attr["low_tide_height"] = data[1]["height"]
-                attr["next_tide"] = "high"
-                attr["next_tide_at"] = attr["high_tide_time_utc"]
-            elif "low" in str(data[0]["type"]):
-                attr["low_tide_time_utc"] = data[0]["time"]
-                attr["low_tide_height"] = data[0]["height"]
-                attr["high_tide_time_utc"] = data[1]["time"]
-                attr["high_tide_height"] = data[1]["height"]
-                attr["next_tide"] = "low"
-                attr["next_tide_at"] = attr["low_tide_time_utc"]
-        
+            index = self._next_tide_index(data)
+            if API_DATA_HIGHTIDE in str(data[index][API_DATA_TYPE]):
+                attr[ATTR_HIGH_TIDE_TIME] = data[index][API_DATA_TIME]
+                attr[ATTR_HIGH_TIDE_HEIGHT] = data[index][API_DATA_HEIGHT]
+                attr[ATTR_LOW_TIDE_TIME] = data[index+1][API_DATA_TIME]
+                attr[ATTR_LOW_TIDE_HEIGHT] = data[index+1][API_DATA_HEIGHT]
+                attr[ATTR_NEXT_TIDE] = API_DATA_HIGHTIDE
+                attr[ATTR_NEXT_TIDE_AT] = attr[ATTR_HIGH_TIDE_TIME]
+            elif API_DATA_LOWTIDE in str(data[index][API_DATA_TYPE]):
+                attr[ATTR_LOW_TIDE_TIME] = data[index][API_DATA_TIME]
+                attr[ATTR_LOW_TIDE_HEIGHT] = data[index][API_DATA_HEIGHT]
+                attr[ATTR_HIGH_TIDE_TIME] = data[index+1][API_DATA_TIME]
+                attr[ATTR_HIGH_TIDE_HEIGHT] = data[index+1][API_DATA_HEIGHT]
+                attr[ATTR_NEXT_TIDE] = API_DATA_LOWTIDE
+                attr[ATTR_NEXT_TIDE_AT] = attr[ATTR_LOW_TIDE_TIME]
+            attr[ATTR_NEXT_TIDE_IN] = ""
         if meta:
-            attr['stormglass_api_cost'] = meta['cost']
-            attr['credits_left'] = int(meta['dailyQuota']) - int(meta['requestCount'])
-            #attr['daily_quota'] = meta['dailyQuota']
-            #attr['request_count'] = meta['requestCount']
-            attr['datum'] = meta['datum']
-            attr['station_distance'] = meta['station']['distance']
-            attr['station_name'] = meta['station']['name']
+            attr[ATTR_STORMGLASS_API_COST] = meta[API_META_COST]
+            attr[ATTR_CREDITS_LEFT] = int(meta[API_META_DAILYQUOTA]) - int(meta[API_META_REQUESTCOUNT])
+            attr[ATTR_DATUM] = meta[API_META_DATUM]
+            attr[ATTR_STATION_DISTANCE] = meta[API_META_STATION][API_META_DISTANCE]
+            attr[ATTR_STATION_NAME] = meta[API_META_STATION][API_META_NAME]
         
         self._attr = attr
 
-        if attr["high_tide_time_utc"] and attr["low_tide_time_utc"]:
+        if attr[ATTR_HIGH_TIDE_TIME] and attr[ATTR_LOW_TIDE_TIME]:
             self._update_state(attr)
 
         return
 
     def _is_update_needed(self, attr) -> bool:
-        if hasattr(attr, 'next_tide_at'):
-            if attr["next_tide_at"]:
-                now = datetime.now()
-                next = datetime.strptime(
-                    attr["next_tide_at"],
-                    DATETIME_FORMAT)
+        """Check if we need to fetch data from the API."""
+        if hasattr(attr, ATTR_NEXT_TIDE_AT):
+            if attr[ATTR_NEXT_TIDE_AT]:
+                now = datetime.utcnow()
+                next = dt.parse_datetime(attr[ATTR_NEXT_TIDE_AT])
                 diference = next - now
                 total_minutes = diference.total_seconds() / 60
                 hours = int(total_minutes / 60)
                 minutes = int(total_minutes - (hours*60))
-                self._attr["next_tide_in"] = f"{hours}h{minutes}"
+                self._attr[ATTR_NEXT_TIDE_IN] = f"{hours}h{minutes}"
                 return (hours <= 0 and minutes < 15)
         return True
 

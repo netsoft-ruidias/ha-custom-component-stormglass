@@ -2,7 +2,7 @@
 import aiohttp
 import logging
 import json
-import time
+from datetime import timedelta, datetime
 
 from .const import EXTREMES_URL
 
@@ -19,10 +19,14 @@ class StormglassAPI:
 
     async def fetchExtremes(self, apiKey: str, lat: float, lng: float):
         try:
-            _LOGGER.debug("Fetch Extremes...")
-            start = int(time.time())
-            end = int(time.time()) + (3600 * 24)
+            start = datetime.utcnow()
+            end = start + timedelta(hours=25)
             
+            _LOGGER.debug(
+                "Fetch Extremes... from %s to %s", 
+                start, 
+                end)
+
             async with self.websession.get(
                 EXTREMES_URL, 
                 params = { 
