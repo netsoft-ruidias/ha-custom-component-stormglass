@@ -4,7 +4,6 @@ import time
 from datetime import timedelta, datetime
 
 from custom_components.stormglass.api import StormglassAPI
-from custom_components.stormglass.const import DATETIME_FORMAT
 from homeassistant.util import dt
 
 from custom_components.stormglass.countries import COUNTRIES, BEACHES
@@ -15,6 +14,7 @@ async def main():
 
         # details = await api.fetchExtremes(
         #     "1044e504-c6df-11ec-ab59-0242ac130002-1044e586-c6df-11ec-ab59-0242ac130002", 
+        #     "test"
         #     41.444525, 
         #     -8.780134
         # )
@@ -64,9 +64,9 @@ async def main():
         end = start + timedelta(hours=24)
         print ("from/to:", time.time(), start, end)
 
-        st1 = datetime.timestamp(start)
-        en1 = datetime.timestamp(end)
-        print ("from/to:", st1, en1)
+        st1 = str(datetime.timestamp(start))
+        en1 = str(datetime.timestamp(end))
+        print ("from/to (str):", st1, en1)
 
         attr["next_tide_at"] = "2022-07-05T19:03:00+00:00"
 
@@ -74,7 +74,7 @@ async def main():
         print (" ")
         print (" ")
         now = datetime.utcnow()
-        next = datetime.strptime(attr["next_tide_at"], DATETIME_FORMAT)
+        next = dt.parse_datetime(attr["next_tide_at"])
 
         diference = next - now
         print ("diference", diference)

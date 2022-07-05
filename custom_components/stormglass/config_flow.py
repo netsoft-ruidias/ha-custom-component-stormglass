@@ -51,8 +51,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
             valid = await self._test_credentials(
                 user_input[CONF_API_KEY],
-                float(coord[0]),
-                float(coord[1]))
+                label,
+                coord[0],
+                coord[1])
             if valid:
                 _LOGGER.debug("Config is valid!")               
                 return self.async_create_entry(
@@ -83,13 +84,17 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def _test_credentials(self, api_key: str, lat: float, long: float) -> bool:
+    async def _test_credentials(self, api_key: str, name: str, lat, long) -> bool:
         """Return true if credentials is valid."""
         session = async_get_clientsession(self.hass, True)
         async with async_timeout.timeout(10):
             api = StormglassAPI(session)
             try:
-                details = await api.fetchExtremes(api_key, lat, long)
+                details = await api.fetchExtremes(
+                    api_key, 
+                    name, 
+                    float(lat), 
+                    float(long))
                 if details:
                     return True
                 return False

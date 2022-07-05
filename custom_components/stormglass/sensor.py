@@ -203,6 +203,7 @@ class StormglassSensor(SensorEntity):
             try:        
                 details = await api.fetchExtremes(
                     config[CONF_API_KEY], 
+                    config[CONF_NAME], 
                     float(config[CONF_LATITUDE]),
                     float(config[CONF_LONGITUDE]))
                 if (details):

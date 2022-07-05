@@ -17,7 +17,7 @@ class StormglassAPI:
         self.websession = websession
         self.json = None
 
-    async def fetchExtremes(self, apiKey: str, lat: float, lng: float):
+    async def fetchExtremes(self, apiKey: str, name: str, lat: float, lng: float):
         try:
             start = datetime.utcnow()
             end = start + timedelta(hours=25)
@@ -32,8 +32,8 @@ class StormglassAPI:
                 params = { 
                     'lat': lat, 
                     'lng': lng,
-                    'start': start,
-                    'end': end
+                    'start': str(start),
+                    'end': str(end)
                 },
                 headers = { 
                     "Authorization": apiKey 
@@ -52,7 +52,7 @@ class StormglassAPI:
                     text = await res.text()
                     obj = json.loads(text)
                     raise Exception(
-                        f"{obj['errors']['key']}, daily quota {obj['meta']['dailyQuota']}, request count {obj['meta']['requestCount']}.")
+                        f"'{name}': {obj['errors']['key']}, request count {obj['meta']['requestCount']} of {obj['meta']['dailyQuota']}.")
                 
                 raise Exception("Could not fetch extremes, API failed")
         except aiohttp.ClientError as err:
