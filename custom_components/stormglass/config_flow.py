@@ -49,7 +49,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 .lower())
             self._abort_if_unique_id_configured()
 
-            valid = await self._test_credentials(user_input)
+            valid = await self._test_credentials(
+                user_input[CONF_API_KEY],
+                float(coord[0]),
+                float(coord[1]))
             if valid:
                 _LOGGER.debug("Config is valid!")               
                 return self.async_create_entry(
@@ -68,13 +71,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user", 
             data_schema=vol.Schema({
                 vol.Required(CONF_API_KEY): str,
-                # vol.Optional(
-                #     CONF_LATITUDE, default=self.hass.config.latitude
-                # ): cv.latitude,
-                # vol.Optional(
-                #     CONF_LONGITUDE, default=self.hass.config.longitude
-                # ): cv.longitude,
-                vol.Optional(
+                vol.Required(
                     CONF_BEACH, default=''
                 ): selector.selector({ 
                     "select": { 
@@ -86,21 +83,16 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def _test_credentials(self, user_input) -> str:
+    async def _test_credentials(self, api_key: str, lat: float, long: float) -> bool:
         """Return true if credentials is valid."""
         session = async_get_clientsession(self.hass, True)
         async with async_timeout.timeout(10):
             api = StormglassAPI(session)
             try:
-                details = await api.fetchExtremes(
-                    user_input[CONF_API_KEY], 
-                    float(user_input[CONF_LATITUDE]),
-                    float(user_input[CONF_LONGITUDE])
-                )                
+                details = await api.fetchExtremes(api_key, lat, long)
                 if details:
-                    return details['meta']['station']['name']
-                else:
-                    return None
+                    return True
+                return False
             except Exception as exception:
                 _LOGGER.error(exception)
-                return None
+                return False

@@ -21,7 +21,7 @@ BEACHES["PT"] = [
     { "value": "41.859,-8.867", "label": "CMN: Praia do Camarido" },
     { "value": "41.849,-8.866", "label": "CMN: Praia de Moledo" },
     { "value": "41.813,-8.865", "label": "CMN: Praia de Vila Praia de Âncora" },
-    { "value": "41.808,-8.865,", "label": "CMN: Praia da Duna do Caldeirão" },
+    { "value": "41.808,-8.865", "label": "CMN: Praia da Duna do Caldeirão" },
     { "value": "41.799,-8.871", "label": "CMN: Praia do Forte do Cão" },
     # Viana do Castelo
     { "value": "41.794,-8.872", "label": "VCT: Praia da Gelfa" },
