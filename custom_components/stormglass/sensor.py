@@ -139,7 +139,7 @@ class StormglassSensor(SensorEntity):
         now = datetime.utcnow()
         for row in data:
             time = dt.parse_datetime(row["time"])
-            if (time > now):
+            if (datetime.timestamp(time) > datetime.timestamp(now)):
                 return index
             index = index + 1
         return 0
