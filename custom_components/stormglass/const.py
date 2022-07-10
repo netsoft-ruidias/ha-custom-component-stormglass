@@ -25,8 +25,8 @@ API_DATA_HIGHTIDE = 'high'
 API_DATA_LOWTIDE = 'low'
 
 
-ATTR_HIGH_TIDE_TIME = "high_tide_time_utc"
-ATTR_LOW_TIDE_TIME = "low_tide_time_utc"
+ATTR_HIGH_TIDE_TIME = "high_tide_at"
+ATTR_LOW_TIDE_TIME = "low_tide_at"
 ATTR_HIGH_TIDE_HEIGHT = "high_tide_height"
 ATTR_LOW_TIDE_HEIGHT = "low_tide_height"
 ATTR_NEXT_TIDE = "next_tide"
